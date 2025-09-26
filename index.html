@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Skills Challenge</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .challenge-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .challenge-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .challenge-icon {
+            background-color: #6a11cb;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .code-editor {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 150px;
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+        
+        .playground {
+            background-color: white;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #5a0db9;
+        }
+        
+        .btn-run {
+            background-color: #28a745;
+        }
+        
+        .btn-run:hover {
+            background-color: #218838;
+        }
+        
+        .btn-reset {
+            background-color: #dc3545;
+        }
+        
+        .btn-reset:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hint {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .show-hint {
+            background: none;
+            border: none;
+            color: #6a11cb;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .progress-container {
+            grid-column: 1 / -1;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+        
+        .completed {
+            color: #28a745;
+        }
+        
+        .sample-element {
+            margin: 5px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .highlight {
+            background-color: yellow;
+        }
+        
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: #6a11cb;
+            margin: 10px;
+            display: inline-block;
+        }
+        
+        .list-item {
+            padding: 8px;
+            margin: 5px 0;
+            background-color: #f1f3f4;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>jQuery Skills Challenge</h1>
+            <p class="subtitle">Test your jQuery knowledge with these interactive challenges</p>
+        </header>
+        
+        <!-- Challenge 1: jQuery Selectors -->
+        <div class="challenge-container">
+            <div class="challenge-title">
+                <div class="challenge-icon">1</div>
+                <h2>jQuery Selectors</h2>
+            </div>
+            <div class="instructions">
+                <p>Use jQuery selectors to highlight all paragraphs with the class "special" in yellow.</p>
+            </div>
+            <div class="code-editor">
+                <div class="code-header">
+                    <span>jQuery Code</span>
+                    <span>Challenge 1/5</span>
+                </div>
+                <textarea id="code1">// Write your jQuery code here
+// Example: $("p").css("color", "red");</textarea>
+            </div>
+            <div class="playground" id="playground1">
+                <p class="special">This is a special paragraph.</p>
+                <p>This is a regular paragraph.</p>
+                <p class="special">Another special paragraph.</p>
+                <div class="special">This is a special div (should not be highlighted).</div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-run" onclick="runCode(1)">Run Code</button>
+                <button class="btn btn-reset" onclick="resetChallenge(1)">Reset</button>
+            </div>
+            <div class="result" id="result1"></div>
+            <button class="show-hint" onclick="toggleHint(1)">Show Hint</button>
+            <div class="hint" id="hint1">
+                <p><strong>Hint:</strong> Use the class selector $(".special") to select elements with the class "special". Then filter for only paragraph elements and apply the CSS.</p>
+                <p>Example: $(".special").filter("p").css("background-color", "yellow");</p>
+            </div>
+        </div>
+        
+        <!-- Challenge 2: jQuery HTML -->
+        <div class="challenge-container">
+            <div class="challenge-title">
+                <div class="challenge-icon">2</div>
+                <h2>jQuery HTML</h2>
+            </div>
+            <div class="instructions">
+                <p>Use jQuery to add a new list item with the text "New Item" to the unordered list.</p>
+            </div>
+            <div class="code-editor">
+                <div class="code-header">
+                    <span>jQuery Code</span>
+                    <span>Challenge 2/5</span>
+                </div>
+                <textarea id="code2">// Write your jQuery code here</textarea>
+            </div>
+            <div class="playground" id="playground2">
+                <ul id="myList">
+                    <li class="list-item">First item</li>
+                    <li class="list-item">Second item</li>
+                    <li class="list-item">Third item</li>
+                </ul>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-run" onclick="runCode(2)">Run Code</button>
+                <button class="btn btn-reset" onclick="resetChallenge(2)">Reset</button>
+            </div>
+            <div class="result" id="result2"></div>
+            <button class="show-hint" onclick="toggleHint(2)">Show Hint</button>
+            <div class="hint" id="hint2">
+                <p><strong>Hint:</strong> Use the .append() method to add content to the end of an element.</p>
+                <p>Example: $("#myList").append("&lt;li&gt;New Item&lt;/li&gt;");</p>
+            </div>
+        </div>
+        
+        <!-- Challenge 3: jQuery CSS -->
+        <div class="challenge-container">
+            <div class="challenge-title">
+                <div class="challenge-icon">3</div>
+                <h2>jQuery CSS</h2>
+            </div>
+            <div class="instructions">
+                <p>Use jQuery to change the background color of all boxes to blue and add a border.</p>
+            </div>
+            <div class="code-editor">
+                <div class="code-header">
+                    <span>jQuery Code</span>
+                    <span>Challenge 3/5</span>
+                </div>
+                <textarea id="code3">// Write your jQuery code here</textarea>
+            </div>
+            <div class="playground" id="playground3">
+                <div class="box"></div>
+                <div class="box"></div>
+                <div class="box"></div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-run" onclick="runCode(3)">Run Code</button>
+                <button class="btn btn-reset" onclick="resetChallenge(3)">Reset</button>
+            </div>
+            <div class="result" id="result3"></div>
+            <button class="show-hint" onclick="toggleHint(3)">Show Hint</button>
+            <div class="hint" id="hint3">
+                <p><strong>Hint:</strong> Use the .css() method to change CSS properties.</p>
+                <p>Example: $(".box").css({"background-color": "blue", "border": "2px solid black"});</p>
+            </div>
+        </div>
+        
+        <!-- Challenge 4: jQuery DOM -->
+        <div class="challenge-container">
+            <div class="challenge-title">
+                <div class="challenge-icon">4</div>
+                <h2>jQuery DOM</h2>
+            </div>
+            <div class="instructions">
+                <p>Use jQuery to remove the second paragraph and clone the first paragraph.</p>
+            </div>
+            <div class="code-editor">
+                <div class="code-header">
+                    <span>jQuery Code</span>
+                    <span>Challenge 4/5</span>
+                </div>
+                <textarea id="code4">// Write your jQuery code here</textarea>
+            </div>
+            <div class="playground" id="playground4">
+                <p id="para1">First paragraph (to be cloned)</p>
+                <p id="para2">Second paragraph (to be removed)</p>
+                <p id="para3">Third paragraph</p>
+                <div id="target"></div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-run" onclick="runCode(4)">Run Code</button>
+                <button class="btn btn-reset" onclick="resetChallenge(4)">Reset</button>
+            </div>
+            <div class="result" id="result4"></div>
+            <button class="show-hint" onclick="toggleHint(4)">Show Hint</button>
+            <div class="hint" id="hint4">
+                <p><strong>Hint:</strong> Use .remove() to delete an element and .clone() to create a copy. Then use .appendTo() to add the clone to the target div.</p>
+                <p>Example: 
+                    $("#para2").remove();
+                    $("#para1").clone().appendTo("#target");
+                </p>
+            </div>
+        </div>
+        
+        <!-- Challenge 5: jQuery Events -->
+        <div class="challenge-container">
+            <div class="challenge-title">
+                <div class="challenge-icon">5</div>
+                <h2>jQuery Events</h2>
+            </div>
+            <div class="instructions">
+                <p>Use jQuery to make the button toggle the visibility of the text when clicked.</p>
+            </div>
+            <div class="code-editor">
+                <div class="code-header">
+                    <span>jQuery Code</span>
+                    <span>Challenge 5/5</span>
+                </div>
+                <textarea id="code5">// Write your jQuery code here</textarea>
+            </div>
+            <div class="playground" id="playground5">
+                <button id="toggleBtn">Toggle Text</button>
+                <p id="toggleText">This text will be toggled on button click.</p>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-run" onclick="runCode(5)">Run Code</button>
+                <button class="btn btn-reset" onclick="resetChallenge(5)">Reset</button>
+            </div>
+            <div class="result" id="result5"></div>
+            <button class="show-hint" onclick="toggleHint(5)">Show Hint</button>
+            <div class="hint" id="hint5">
+                <p><strong>Hint:</strong> Use .click() or .on('click') to handle the button click event, and .toggle() to show/hide the text.</p>
+                <p>Example: 
+                    $("#toggleBtn").click(function() {
+                        $("#toggleText").toggle();
+                    });
+                </p>
+            </div>
+        </div>
+        
+        <!-- Progress Section -->
+        <div class="progress-container">
+            <h3>Your Progress</h3>
+            <div class="progress-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">0% Complete (0/5 Challenges)</div>
+        </div>
+    </div>
+
+    <script>
+        // Store original HTML for reset functionality
+        const originalHTML = {
+            1: document.getElementById('playground1').innerHTML,
+            2: document.getElementById('playground2').innerHTML,
+            3: document.getElementById('playground3').innerHTML,
+            4: document.getElementById('playground4').innerHTML,
+            5: document.getElementById('playground5').innerHTML
+        };
+        
+        // Store completed challenges
+        let completedChallenges = JSON.parse(localStorage.getItem('jqueryCompleted')) || [];
+        
+        // Update progress on page load
+        updateProgress();
+        
+        function runCode(challengeNum) {
+            const code = document.getElementById(`code${challengeNum}`).value;
+            const resultDiv = document.getElementById(`result${challengeNum}`);
+            const playground = document.getElementById(`playground${challengeNum}`);
+            
+            // Clear previous result
+            resultDiv.style.display = 'none';
+            resultDiv.className = 'result';
+            
+            try {
+                // Save original playground HTML
+                const originalPlaygroundHTML = playground.innerHTML;
+                
+                // Execute the code
+                eval(code);
+                
+                // Check if the challenge is completed
+                let isCompleted = false;
+                
+                switch(challengeNum) {
+                    case 1:
+                        // Check if special paragraphs are highlighted
+                        const specialParas = playground.querySelectorAll('p.special');
+                        isCompleted = specialParas.length > 0 && 
+                                     Array.from(specialParas).every(p => 
+                                         p.style.backgroundColor === 'yellow' || 
+                                         p.style.backgroundColor === 'rgb(255, 255, 0)');
+                        break;
+                    case 2:
+                        // Check if new list item was added
+                        const listItems = playground.querySelectorAll('#myList li');
+                        isCompleted = listItems.length === 4 && 
+                                     Array.from(listItems).some(li => 
+                                         li.textContent.includes('New Item'));
+                        break;
+                    case 3:
+                        // Check if boxes are blue with border
+                        const boxes = playground.querySelectorAll('.box');
+                        isCompleted = boxes.length > 0 && 
+                                     Array.from(boxes).every(box => 
+                                         (box.style.backgroundColor === 'blue' || 
+                                          box.style.backgroundColor === 'rgb(0, 0, 255)') && 
+                                         box.style.border);
+                        break;
+                    case 4:
+                        // Check if second para is removed and first is cloned
+                        isCompleted = !playground.querySelector('#para2') && 
+                                     playground.querySelector('#target p');
+                        break;
+                    case 5:
+                        // Check if toggle functionality works
+                        const toggleText = playground.querySelector('#toggleText');
+                        const originalDisplay = toggleText.style.display;
+                        
+                        // Simulate a click
+                        playground.querySelector('#toggleBtn').click();
+                        const afterClickDisplay = toggleText.style.display;
+                        
+                        // Click again to return to original state
+                        playground.querySelector('#toggleBtn').click();
+                        
+                        isCompleted = originalDisplay !== afterClickDisplay;
+                        break;
+                }
+                
+                if (isCompleted) {
+                    resultDiv.innerHTML = '<strong>Success!</strong> You completed the challenge correctly.';
+                    resultDiv.className = 'result success';
+                    
+                    // Mark challenge as completed if not already
+                    if (!completedChallenges.includes(challengeNum)) {
+                        completedChallenges.push(challengeNum);
+                        localStorage.setItem('jqueryCompleted', JSON.stringify(completedChallenges));
+                        updateProgress();
+                    }
+                } else {
+                    resultDiv.innerHTML = '<strong>Not quite right.</strong> Try again or check the hint.';
+                    resultDiv.className = 'result error';
+                }
+                
+                resultDiv.style.display = 'block';
+                
+            } catch (error) {
+                resultDiv.innerHTML = `<strong>Error:</strong> ${error.message}`;
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+            }
+        }
+        
+        function resetChallenge(challengeNum) {
+            document.getElementById(`playground${challengeNum}`).innerHTML = originalHTML[challengeNum];
+            document.getElementById(`code${challengeNum}`).value = 
+                challengeNum === 1 ? '// Write your jQuery code here\n// Example: $("p").css("color", "red");' : 
+                '// Write your jQuery code here';
+            document.getElementById(`result${challengeNum}`).style.display = 'none';
+        }
+        
+        function toggleHint(challengeNum) {
+            const hint = document.getElementById(`hint${challengeNum}`);
+            const button = document.querySelector(`#hint${challengeNum}`).previousElementSibling;
+            
+            if (hint.style.display === 'block') {
+                hint.style.display = 'none';
+                button.textContent = 'Show Hint';
+            } else {
+                hint.style.display = 'block';
+                button.textContent = 'Hide Hint';
+            }
+        }
+        
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            const progress = (completedChallenges.length / 5) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            if (completedChallenges.length === 5) {
+                progressText.innerHTML = `<span class="completed">100% Complete! Congratulations! 🎉</span>`;
+            } else {
+                progressText.textContent = `${progress}% Complete (${completedChallenges.length}/5 Challenges)`;
+            }
+        }
+    </script>
+</body>
+</html>
