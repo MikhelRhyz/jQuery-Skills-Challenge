@@ -1,0 +1,258 @@
+* {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .challenge-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .challenge-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .challenge-icon {
+            background-color: #6a11cb;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .code-editor {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 150px;
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+        
+        .playground {
+            background-color: white;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            background-color: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #5a0db9;
+        }
+        
+        .btn-run {
+            background-color: #28a745;
+        }
+        
+        .btn-run:hover {
+            background-color: #218838;
+        }
+        
+        .btn-reset {
+            background-color: #dc3545;
+        }
+        
+        .btn-reset:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .hint {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .show-hint {
+            background: none;
+            border: none;
+            color: #6a11cb;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .progress-container {
+            grid-column: 1 / -1;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-weight: bold;
+            color: #6a11cb;
+        }
+        
+        .completed {
+            color: #28a745;
+        }
+        
+        .sample-element {
+            margin: 5px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .highlight {
+            background-color: yellow;
+        }
+        
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: #6a11cb;
+            margin: 10px;
+            display: inline-block;
+        }
+        
+        .list-item {
+            padding: 8px;
+            margin: 5px 0;
+            background-color: #f1f3f4;
+            border-radius: 4px;
+        }
